@@ -32,10 +32,25 @@ foreach ($rawFields as $key => $value) {
     $fields[$key] = trim($value);
 }
 
+// 文字数ルール
+$rules = [
+    'name' => 100,
+    'address' => 200,
+    'login' => 100,
+    'password' => 255,
+];
+
 // 入力値空欄チェック
 foreach ($fields as $key => $value) {
     if ($value === '') {
         exit($key . 'を入力してください。');
+    }
+}
+
+// 入力値文字数チェック
+foreach ($rules as $key => $max) {
+    if (mb_strlen($fields[$key]) >= $max) {
+        exit($key . 'は' . $max . '以内で入力してください。');
     }
 }
 
