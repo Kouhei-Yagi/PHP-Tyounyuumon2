@@ -26,6 +26,13 @@ foreach ($fields as $key => $value) {
     }
 }
 
+// 入力値空欄チェック
+foreach ($fields as $key => $value) {
+    if ($value === '') {
+        exit($key . 'を入力してください。');
+    }
+}
+
 // ＜処理＞
 // DBに登録
 // データベース接続設定
@@ -47,10 +54,10 @@ try {
     $stmt = $pdo->prepare($sql);
 
     // パラメータ設定
-    $stmt->bindValue(':name', $name, PDO::PARAM_STR);
-    $stmt->bindValue(':address', $address, PDO::PARAM_STR);
-    $stmt->bindValue(':login', $login, PDO::PARAM_STR);
-    $stmt->bindValue(':password', $password, PDO::PARAM_STR);
+    $stmt->bindValue(':name', $fields['name'], PDO::PARAM_STR);
+    $stmt->bindValue(':address', $fields['address'], PDO::PARAM_STR);
+    $stmt->bindValue(':login', $fields['login'], PDO::PARAM_STR);
+    $stmt->bindValue(':password', $fields['password'], PDO::PARAM_STR);
 
     // クエリ実行
     $stmt->execute();
