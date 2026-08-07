@@ -1,5 +1,10 @@
 <?php
 // ＜入力＞
+// POST送信チェック
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    exit('不正なアクセスです。');
+}
+
 // 入力値を取得
 $name = $_POST['name'];
 $address = $_POST['address'];
