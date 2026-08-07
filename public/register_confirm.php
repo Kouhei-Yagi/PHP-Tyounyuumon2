@@ -11,8 +11,8 @@ $address = filter_input(INPUT_POST, 'address');
 $login = filter_input(INPUT_POST, 'login');
 $password = filter_input(INPUT_POST, 'password');
 
-// 入力フィールド一覧
-$fields = [
+// trim 前の入力フィールド一覧
+$rawFields = [
     'name' => $name,
     'address' => $address,
     'login' => $login,
@@ -20,10 +20,16 @@ $fields = [
 ];
 
 // 入力値存在チェック
-foreach ($fields as $key => $value) {
+foreach ($rawFields as $key => $value) {
     if ($value === null) {
         exit('不正なアクセスです。');
     }
+}
+
+// trim 後の入力フィールド一覧を作成
+$fields = [];
+foreach ($rawFields as $key => $value) {
+    $fields[$key] = trim($value);
 }
 
 // 入力値空欄チェック
