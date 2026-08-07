@@ -5,11 +5,26 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit('不正なアクセスです。');
 }
 
-// 入力値を取得
-$name = $_POST['name'];
-$address = $_POST['address'];
-$login = $_POST['login'];
-$password = $_POST['password'];
+// 入力値取得
+$name = filter_input(INPUT_POST, 'name');
+$address = filter_input(INPUT_POST, 'address');
+$login = filter_input(INPUT_POST, 'login');
+$password = filter_input(INPUT_POST, 'password');
+
+// 入力フィールド一覧
+$fields = [
+    'name' => $name,
+    'address' => $address,
+    'login' => $login,
+    'password' => $password,
+];
+
+// 入力値存在チェック
+foreach ($fields as $key => $value) {
+    if ($value === null) {
+        exit('不正なアクセスです。');
+    }
+}
 
 // ＜処理＞
 // DBに登録
