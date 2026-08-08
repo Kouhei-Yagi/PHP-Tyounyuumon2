@@ -49,7 +49,7 @@ foreach ($fields as $key => $value) {
 
 // 入力値文字数チェック
 foreach ($rules as $key => $max) {
-    if (mb_strlen($fields[$key]) >= $max) {
+    if (mb_strlen($fields[$key]) > $max) {
         exit($key . 'は' . $max . '以内で入力してください。');
     }
 }
@@ -70,18 +70,38 @@ try {
     // データベース接続
     $pdo = new PDO($dsn, $username, $dbPassword, $options);
 
+    // ログイン名重複チェック
     // クエリ準備
-    $sql = 'INSERT INTO customer(name, address, login, password) VALUES(:name, :address, :login, :password)';
-    $stmt = $pdo->prepare($sql);
+    $sqlSelectLogin = 'SELECT COUNT(*) FROM customer WHERE login = :login';
+    $stmtSelectLogin = $pdo->prepare($sqlSelectLogin);
 
     // パラメータ設定
-    $stmt->bindValue(':name', $fields['name'], PDO::PARAM_STR);
-    $stmt->bindValue(':address', $fields['address'], PDO::PARAM_STR);
-    $stmt->bindValue(':login', $fields['login'], PDO::PARAM_STR);
-    $stmt->bindValue(':password', $fields['password'], PDO::PARAM_STR);
+    $stmtSelectLogin->bindValue(':login', $fields['login'], PDO::PARAM_STR);
 
     // クエリ実行
-    $stmt->execute();
+    $stmtSelectLogin->execute();
+
+    // 結果を取得
+    $count = $stmtSelectLogin->fetchColumn();
+
+    // 重複チェック
+    if ($count > 0) {
+        exit('ログイン名が重複しています。');
+    }
+
+    // 登録処理
+    // クエリ準備
+    $sqlInsertCustomer = 'INSERT INTO customer(name, address, login, password) VALUES(:name, :address, :login, :password)';
+    $stmtInsertCustomer = $pdo->prepare($sqlInsertCustomer);
+
+    // パラメータ設定
+    $stmtInsertCustomer->bindValue(':name', $fields['name'], PDO::PARAM_STR);
+    $stmtInsertCustomer->bindValue(':address', $fields['address'], PDO::PARAM_STR);
+    $stmtInsertCustomer->bindValue(':login', $fields['login'], PDO::PARAM_STR);
+    $stmtInsertCustomer->bindValue(':password', $fields['password'], PDO::PARAM_STR);
+
+    // クエリ実行
+    $stmtInsertCustomer->execute();
 
     // 例外発生時処理
 } catch (PDOException $e) {
