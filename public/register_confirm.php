@@ -55,7 +55,6 @@ foreach ($rules as $key => $max) {
 }
 
 // ＜処理＞
-// DBに登録
 // データベース接続設定
 $dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
 $username = 'staff';
@@ -90,6 +89,9 @@ try {
     }
 
     // 登録処理
+    // パスワードのハッシュ化
+    $hashedPassword = password_hash($fields['password'], PASSWORD_DEFAULT);
+
     // クエリ準備
     $sqlInsertCustomer = 'INSERT INTO customer(name, address, login, password) VALUES(:name, :address, :login, :password)';
     $stmtInsertCustomer = $pdo->prepare($sqlInsertCustomer);
@@ -98,7 +100,7 @@ try {
     $stmtInsertCustomer->bindValue(':name', $fields['name'], PDO::PARAM_STR);
     $stmtInsertCustomer->bindValue(':address', $fields['address'], PDO::PARAM_STR);
     $stmtInsertCustomer->bindValue(':login', $fields['login'], PDO::PARAM_STR);
-    $stmtInsertCustomer->bindValue(':password', $fields['password'], PDO::PARAM_STR);
+    $stmtInsertCustomer->bindValue(':password', $hashedPassword, PDO::PARAM_STR);
 
     // クエリ実行
     $stmtInsertCustomer->execute();
