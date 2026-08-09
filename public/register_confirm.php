@@ -1,15 +1,27 @@
 <?php
+// セッション開始
+session_start();
+
 // ＜入力＞
 // POST送信チェック
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit('不正なアクセスです。');
 }
 
-// 入力値取得
+// 送信・入力値取得
+$csrfToken = filter_input(INPUT_POST, 'csrf_token');
 $name = filter_input(INPUT_POST, 'name');
 $address = filter_input(INPUT_POST, 'address');
 $login = filter_input(INPUT_POST, 'login');
 $password = filter_input(INPUT_POST, 'password');
+
+// CSRFトークン存在チェック・検証
+if (!isset($csrfToken) || $csrfToken !== $_SESSION['csrf_token']) {
+    exit('不正なアクセスです。');
+}
+
+// CSRFトークン破棄
+unset($_SESSION['csrf_token']);
 
 // trim 前の入力フィールド一覧
 $rawFields = [
