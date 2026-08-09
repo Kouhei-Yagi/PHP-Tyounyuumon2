@@ -1,3 +1,11 @@
+<?php
+// セッション開始
+session_start();
+
+// CSRFトークン生成
+$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -8,6 +16,8 @@
 
 <body>
     <form action="register_confirm.php" method="post">
+        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+
         <p>
             <label for="name">お名前：</label>
             <input type="text" id="name" name="name">
