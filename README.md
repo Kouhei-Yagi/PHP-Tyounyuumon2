@@ -18,7 +18,7 @@
 #### ブランチ命名例
 
 ```sh
-feature/chapter2-first-script
+feature/first-script
 ```
 
 #### 開発フロー
@@ -84,25 +84,27 @@ git push origin --delete feature/xxx
 #### コミットメッセージ例
 
 ```sh
-feat: [chapter2-welcome.php] echoでメッセージを表示する処理を実装
+feat: [public/welcome.php] echoでメッセージを表示する処理を実装
 chore: リポジトリ初期化のためREADMEを追加
 docs: Git運用ルールをREADMEに追記
 ```
 
 ## 開発ロードマップ（chapter7: ECサイト風アプリ）
 
-- [ ] feature/chapter7-db-schema
-- [ ] feature/chapter7-auth-register
-- [ ] feature/chapter7-auth-login
-- [ ] feature/chapter7-auth-logout
-- [ ] feature/chapter7-auth-middleware
-- [ ] refactor/chapter7-extract-db-connection
-- [ ] feature/chapter7-profile-update
-- [ ] feature/chapter7-product-list
-- [ ] feature/chapter7-cart-add
-- [ ] feature/chapter7-cart-update
-- [ ] feature/chapter7-favorite-toggle
-- [ ] feature/chapter7-purchase-checkout
-- [ ] feature/chapter7-purchase-history
-- [ ] feature/chapter7-product-search（任意）
-- [ ] feature/chapter7-security-hardening（任意）
+- [✅] feature/db-schema
+- [✅] feature/auth-register
+- [ ] refactor/auth-register-functions
+- [ ] feature/auth-login
+- [ ] refactor/auth-login-functions
+- [ ] feature/auth-logout
+- [ ] refactor/auth-logout-functions
+- [ ] feature/auth-middleware
+- [ ] feature/profile-update
+- [ ] feature/product-list
+- [ ] feature/cart-add
+- [ ] feature/cart-update
+- [ ] feature/favorite-toggle
+- [ ] feature/purchase-checkout
+- [ ] feature/purchase-history
+- [ ] feature/product-search（任意）
+- [ ] feature/security-hardening（任意）
