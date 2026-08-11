@@ -1,6 +1,7 @@
 <?php
 // 関数ファイルの読み込み
 require_once(__DIR__ . '/../app/db.php');
+require_once(__DIR__ . '/../app/validation.php');
 
 // セッション開始
 session_start();
@@ -35,10 +36,10 @@ $rawFields = [
 ];
 
 // 入力値存在チェック
-foreach ($rawFields as $key => $value) {
-    if ($value === null) {
-        exit('不正なアクセスです。');
-    }
+$isExists = validateExists($rawFields);
+
+if (!$isExists) {
+    exit('不正なアクセスです。');
 }
 
 // trim 後の入力フィールド一覧を作成
