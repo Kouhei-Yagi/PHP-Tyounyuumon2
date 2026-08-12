@@ -33,3 +33,24 @@ function validateRequired(array $fields): ?string
 
     return null;
 }
+
+/**
+ * 入力値文字数チェック
+ *
+ * @param array $rules 最大文字数
+ * @param array $fields trim 後の入力フィールド
+ * @return array{key:string,max:int}|null キー名 + 最大文字数 or null
+ */
+function validateLength(array $rules, array $fields): ?array
+{
+    foreach ($rules as $key => $max) {
+        if (mb_strlen($fields[$key]) > $max) {
+            return [
+                'key' => $key,
+                'max' => $max,
+            ];
+        }
+    }
+
+    return null;
+}
