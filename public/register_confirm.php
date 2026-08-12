@@ -35,13 +35,6 @@ $rawFields = [
     'password' => $password,
 ];
 
-// 入力値存在チェック
-$isExists = validateExists($rawFields);
-
-if (!$isExists) {
-    exit('不正なアクセスです。');
-}
-
 // trim 後の入力フィールド一覧を作成
 $fields = [];
 foreach ($rawFields as $key => $value) {
@@ -56,18 +49,22 @@ $rules = [
     'password' => 255,
 ];
 
-// 入力値空欄チェック
-$errorKey = validateRequired($fields);
+// 入力値バリデーション
+$validated = validateFields($rawFields, $fields, $rules);
 
-if ($errorKey) {
-    exit($errorKey . 'を入力してください。');
+// 入力値存在チェック
+if (!$validated['isExists']) {
+    exit('不正なアクセスです。');
+}
+
+// 入力値空欄チェック
+if ($validated['errorKey']) {
+    exit($validated['errorKey'] . 'を入力してください。');
 }
 
 // 入力値文字数チェック
-$errorArray = validateLength($rules, $fields);
-
-if ($errorArray) {
-    exit($errorArray['key'] . 'は' . $errorArray['max'] . '文字以内で入力してください。');
+if ($validated['errorArray']) {
+    exit($validated['errorArray']['key'] . 'は' . $validated['errorArray']['max'] . '文字以内で入力してください。');
 }
 
 // ＜処理＞
