@@ -57,10 +57,10 @@ $rules = [
 ];
 
 // 入力値空欄チェック
-foreach ($fields as $key => $value) {
-    if ($value === '') {
-        exit($key . 'を入力してください。');
-    }
+$errorKey = validateRequired($fields);
+
+if ($errorKey) {
+    exit($errorKey . 'を入力してください。');
 }
 
 // 入力値文字数チェック
