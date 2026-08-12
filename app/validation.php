@@ -54,3 +54,29 @@ function validateLength(array $rules, array $fields): ?array
 
     return null;
 }
+
+/**
+ * 入力値バリデーション
+ *
+ * @param array $rawFields trim 前入力フィールド
+ * @param array $fields trim 後入力フィールド
+ * @param array $rules 最大文字数
+ * @return array{isExists:bool,errorKey:?string,errorArray:?array}
+ */
+function validateFields(array $rawFields, array $fields, array $rules): array
+{
+    // 入力値存在チェック
+    $isExists = validateExists($rawFields);
+
+    // 入力値空欄チェック
+    $errorKey = validateRequired($fields);
+
+    // 入力値文字数チェック
+    $errorArray = validateLength($rules, $fields);
+
+    return [
+        'isExists' => $isExists,
+        'errorKey' => $errorKey,
+        'errorArray' => $errorArray,
+    ];
+}
