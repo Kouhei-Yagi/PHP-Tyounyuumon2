@@ -64,10 +64,10 @@ if ($errorKey) {
 }
 
 // 入力値文字数チェック
-foreach ($rules as $key => $max) {
-    if (mb_strlen($fields[$key]) > $max) {
-        exit($key . 'は' . $max . '以内で入力してください。');
-    }
+$errorArray = validateLength($rules, $fields);
+
+if ($errorArray) {
+    exit($errorArray['key'] . 'は' . $errorArray['max'] . '文字以内で入力してください。');
 }
 
 // ＜処理＞
