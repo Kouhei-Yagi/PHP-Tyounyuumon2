@@ -1,9 +1,12 @@
 <?php
+// 関数ファイルの読み込み
+require_once(__DIR__ . '/../app/security.php');
+
 // セッション開始
 session_start();
 
 // CSRFトークン生成
-$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+$_SESSION['csrf_token'] = generateCsrfToken();
 ?>
 
 <!DOCTYPE html>

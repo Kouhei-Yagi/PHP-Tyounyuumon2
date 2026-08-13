@@ -1,4 +1,8 @@
 <?php
+// 関数ファイルの読み込み
+require_once(__DIR__ . '/../app/db.php');
+require_once(__DIR__ . '/../app/validation.php');
+
 // セッション開始
 session_start();
 
@@ -15,13 +19,11 @@ $address = filter_input(INPUT_POST, 'address');
 $login = filter_input(INPUT_POST, 'login');
 $password = filter_input(INPUT_POST, 'password');
 
-// CSRFトークン存在チェック・検証
-if (!isset($csrfToken) || $csrfToken !== $_SESSION['csrf_token']) {
+// CSRFトークン存在チェック・検証・破棄
+$isCsrfToken = validateCsrfToken($csrfToken);
+if (!$isCsrfToken) {
     exit('不正なアクセスです。');
 }
-
-// CSRFトークン破棄
-unset($_SESSION['csrf_token']);
 
 // trim 前の入力フィールド一覧
 $rawFields = [
@@ -30,13 +32,6 @@ $rawFields = [
     'login' => $login,
     'password' => $password,
 ];
-
-// 入力値存在チェック
-foreach ($rawFields as $key => $value) {
-    if ($value === null) {
-        exit('不正なアクセスです。');
-    }
-}
 
 // trim 後の入力フィールド一覧を作成
 $fields = [];
@@ -52,18 +47,22 @@ $rules = [
     'password' => 255,
 ];
 
+// 入力値バリデーション
+$validated = validateFields($rawFields, $fields, $rules);
+
+// 入力値存在チェック
+if (!$validated['isExists']) {
+    exit('不正なアクセスです。');
+}
+
 // 入力値空欄チェック
-foreach ($fields as $key => $value) {
-    if ($value === '') {
-        exit($key . 'を入力してください。');
-    }
+if ($validated['errorKey']) {
+    exit($validated['errorKey'] . 'を入力してください。');
 }
 
 // 入力値文字数チェック
-foreach ($rules as $key => $max) {
-    if (mb_strlen($fields[$key]) > $max) {
-        exit($key . 'は' . $max . '以内で入力してください。');
-    }
+if ($validated['errorArray']) {
+    exit($validated['errorArray']['key'] . 'は' . $validated['errorArray']['max'] . '文字以内で入力してください。');
 }
 
 // ＜処理＞
@@ -71,15 +70,11 @@ foreach ($rules as $key => $max) {
 $dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
 $username = 'staff';
 $dbPassword = 'password';
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_EMULATE_PREPARES => false,
-];
 
 // 例外処理
 try {
     // データベース接続
-    $pdo = new PDO($dsn, $username, $dbPassword, $options);
+    $pdo = getDbConnection($dsn, $username, $dbPassword);
 
     // ログイン名重複チェック
     // クエリ準備
