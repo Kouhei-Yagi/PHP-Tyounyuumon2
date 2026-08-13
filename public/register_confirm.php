@@ -19,13 +19,11 @@ $address = filter_input(INPUT_POST, 'address');
 $login = filter_input(INPUT_POST, 'login');
 $password = filter_input(INPUT_POST, 'password');
 
-// CSRFトークン存在チェック・検証
-if (!isset($csrfToken) || $csrfToken !== $_SESSION['csrf_token']) {
+// CSRFトークン存在チェック・検証・破棄
+$isCsrfToken = validateCsrfToken($csrfToken);
+if (!$isCsrfToken) {
     exit('不正なアクセスです。');
 }
-
-// CSRFトークン破棄
-unset($_SESSION['csrf_token']);
 
 // trim 前の入力フィールド一覧
 $rawFields = [
