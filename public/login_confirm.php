@@ -9,28 +9,40 @@ $password = $_POST['password'];
 $dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
 $username = 'staff';
 $dbPassword = 'password';
+$options = [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_EMULATE_PREPARES => false,
+];
 
-// データベース接続
-$pdo = new PDO($dsn, $username, $dbPassword);
+// 例外処理
+try {
+    // データベース接続
+    $pdo = new PDO($dsn, $username, $dbPassword, $options);
 
-// 検証処理
-// クエリ準備
-$sql = 'SELECT * FROM customer WHERE login = :login AND password = :password';
-$stmt = $pdo->prepare($sql);
+    // 検証処理
+    // クエリ準備
+    $sql = 'SELECT * FROM customer WHERE login = :login AND password = :password';
+    $stmt = $pdo->prepare($sql);
 
-// パラメータ設定
-$stmt->bindValue(':login', $login, PDO::PARAM_STR);
-$stmt->bindValue(':password', $password, PDO::PARAM_STR);
+    // パラメータ設定
+    $stmt->bindValue(':login', $login, PDO::PARAM_STR);
+    $stmt->bindValue(':password', $password, PDO::PARAM_STR);
 
-// クエリ実行
-$stmt->execute();
+    // クエリ実行
+    $stmt->execute();
 
-// 結果取得
-$result = $stmt->fetch(PDO::FETCH_ASSOC);
+    // 結果取得
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// ログイン検証
-if (!$result) {
-    exit('ログインが失敗しました。');
+    // ログイン検証
+    if (!$result) {
+        exit('ログインに失敗しました。');
+    }
+
+    // 例外発生時処理
+} catch (PDOException $e) {
+    error_log($e->getMessage());
+    exit('システムエラーが発生しました。');
 }
 
 // ＜出力＞
