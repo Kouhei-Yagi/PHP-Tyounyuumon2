@@ -19,43 +19,25 @@ try {
     // データベース接続
     $pdo = new PDO($dsn, $username, $dbPassword, $options);
 
-    // パスワードのハッシュ認証
-    // クエリ準備
-    $sqlSelectPassword = 'SELECT password FROM customer WHERE login = :login';
-    $stmtSelectPassword = $pdo->prepare($sqlSelectPassword);
-
-    // パラメータ設定
-    $stmtSelectPassword->bindValue(':login', $login, PDO::PARAM_STR);
-
-    // クエリ実行
-    $stmtSelectPassword->execute();
-
-    // 結果取得
-    $hash = $stmtSelectPassword->fetch(PDO::FETCH_ASSOC);
-
-    // 検証
-    $isHash = password_verify($password, $hash['password']);
-    if (!$isHash) {
-        exit('ログインに失敗しました。');
-    }
-
     // ログイン検証
     // クエリ準備
-    $sqlSelectCustomer = 'SELECT * FROM customer WHERE login = :login AND password = :password';
+    $sqlSelectCustomer = 'SELECT * FROM customer WHERE login = :login';
     $stmtSelectCustomer = $pdo->prepare($sqlSelectCustomer);
 
     // パラメータ設定
     $stmtSelectCustomer->bindValue(':login', $login, PDO::PARAM_STR);
-    $stmtSelectCustomer->bindValue(':password', $hash['password'], PDO::PARAM_STR);
 
     // クエリ実行
     $stmtSelectCustomer->execute();
 
     // 結果取得
-    $result = $stmtSelectCustomer->fetch(PDO::FETCH_ASSOC);
+    $customer = $stmtSelectCustomer->fetch(PDO::FETCH_ASSOC);
+
+    // パスワードのハッシュ検証
+    $isHash = password_verify($password, $customer['password']);
 
     // ログイン検証
-    if (!$result) {
+    if (!$isHash) {
         exit('ログインに失敗しました。');
     }
 
