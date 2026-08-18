@@ -17,6 +17,13 @@ foreach ($rawFields as $key => $value) {
     }
 }
 
+// 入力値空欄チェック
+foreach ($rawFields as $key => $value) {
+    if ($value === '') {
+        exit($key . 'を入力してください。');
+    }
+}
+
 // ＜処理＞
 // データベース接続設定
 $dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
@@ -38,7 +45,7 @@ try {
     $stmtSelectCustomer = $pdo->prepare($sqlSelectCustomer);
 
     // パラメータ設定
-    $stmtSelectCustomer->bindValue(':login', $login, PDO::PARAM_STR);
+    $stmtSelectCustomer->bindValue(':login', $rawFields['login'], PDO::PARAM_STR);
 
     // クエリ実行
     $stmtSelectCustomer->execute();
@@ -52,7 +59,7 @@ try {
     }
 
     // パスワードのハッシュ検証
-    $isHash = password_verify($password, $customer['password']);
+    $isHash = password_verify($rawFields['password'], $customer['password']);
     if (!$isHash) {
         exit('ログインに失敗しました。');
     }
