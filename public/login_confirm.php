@@ -1,8 +1,13 @@
 <?php
 // ＜入力＞
 // 入力・送信値取得
-$login = $_POST['login'];
-$password = $_POST['password'];
+$login = filter_input(INPUT_POST, 'login');
+$password = filter_input(INPUT_POST, 'password');
+
+// 入力値存在チェック
+if ($login === null || $password === null) {
+    exit('不正なアクセスです。');
+}
 
 // ＜処理＞
 // データベース接続設定
