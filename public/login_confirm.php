@@ -4,9 +4,17 @@
 $login = filter_input(INPUT_POST, 'login');
 $password = filter_input(INPUT_POST, 'password');
 
+// 入力フィールド一覧
+$rawFields = [
+    'login' => $login,
+    'password' => $password,
+];
+
 // 入力値存在チェック
-if ($login === null || $password === null) {
-    exit('不正なアクセスです。');
+foreach ($rawFields as $key => $value) {
+    if ($value === null) {
+        exit('不正なアクセスです。');
+    }
 }
 
 // ＜処理＞
