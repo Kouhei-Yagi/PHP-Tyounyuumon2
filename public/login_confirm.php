@@ -33,10 +33,13 @@ try {
     // 結果取得
     $customer = $stmtSelectCustomer->fetch(PDO::FETCH_ASSOC);
 
+    // ログイン名存在チェック
+    if (!$customer) {
+        exit('ログインに失敗しました。');
+    }
+
     // パスワードのハッシュ検証
     $isHash = password_verify($password, $customer['password']);
-
-    // ログイン検証
     if (!$isHash) {
         exit('ログインに失敗しました。');
     }
