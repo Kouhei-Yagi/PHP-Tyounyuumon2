@@ -30,6 +30,19 @@ foreach ($fields as $key => $value) {
     }
 }
 
+// 入力値最大文字数
+$maxLengths = [
+    'login' => 100,
+    'password' => 255,
+];
+
+// 入力値文字数チェック
+foreach ($maxLengths as $key => $max) {
+    if (mb_strlen($fields[$key]) > $max) {
+        exit($key . 'は' . $max . '文字以内で入力してください。');
+    }
+}
+
 // ＜処理＞
 // データベース接続設定
 $dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
