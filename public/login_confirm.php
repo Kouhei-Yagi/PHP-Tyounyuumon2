@@ -3,6 +3,11 @@
 session_start();
 
 // ＜入力＞
+// POST送信チェック
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    exit('不正なアクセスです。');
+}
+
 // 入力・送信値取得
 $csrfToken = filter_input(INPUT_POST, 'csrf_token');
 $login = filter_input(INPUT_POST, 'login');
