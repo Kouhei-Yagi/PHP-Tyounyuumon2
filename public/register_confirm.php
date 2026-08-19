@@ -40,8 +40,8 @@ foreach ($rawFields as $key => $value) {
     $fields[$key] = trim($value);
 }
 
-// 文字数ルール
-$rules = [
+// 入力値最大文字数
+$maxLengths = [
     'name' => 100,
     'address' => 200,
     'login' => 100,
@@ -49,7 +49,7 @@ $rules = [
 ];
 
 // 入力値バリデーション
-$validated = validateFields($rawFields, $fields, $rules);
+$validated = validateFields($rawFields, $fields, $maxLengths);
 
 // 入力値存在チェック
 if (!$validated['isExists']) {

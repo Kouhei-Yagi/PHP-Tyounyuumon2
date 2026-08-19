@@ -37,13 +37,13 @@ function validateRequired(array $fields): ?string
 /**
  * 入力値文字数チェック
  *
- * @param array $rules 最大文字数
+ * @param array $maxLengths 最大文字数
  * @param array $fields trim 後の入力フィールド
  * @return array{key:string,max:int}|null キー名 + 最大文字数 or null
  */
-function validateLength(array $rules, array $fields): ?array
+function validateLength(array $maxLengths, array $fields): ?array
 {
-    foreach ($rules as $key => $max) {
+    foreach ($maxLengths as $key => $max) {
         if (mb_strlen($fields[$key]) > $max) {
             return [
                 'key' => $key,
@@ -60,10 +60,10 @@ function validateLength(array $rules, array $fields): ?array
  *
  * @param array $rawFields trim 前入力フィールド
  * @param array $fields trim 後入力フィールド
- * @param array $rules 最大文字数
+ * @param array $maxLengths 最大文字数
  * @return array{isExists:bool,errorKey:?string,errorArray:?array}
  */
-function validateFields(array $rawFields, array $fields, array $rules): array
+function validateFields(array $rawFields, array $fields, array $maxLengths): array
 {
     // 入力値存在チェック
     $isExists = validateExists($rawFields);
@@ -72,7 +72,7 @@ function validateFields(array $rawFields, array $fields, array $rules): array
     $errorKey = validateRequired($fields);
 
     // 入力値文字数チェック
-    $errorArray = validateLength($rules, $fields);
+    $errorArray = validateLength($maxLengths, $fields);
 
     return [
         'isExists' => $isExists,
