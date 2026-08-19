@@ -4,7 +4,7 @@
 $login = filter_input(INPUT_POST, 'login');
 $password = filter_input(INPUT_POST, 'password');
 
-// 入力フィールド一覧
+// trim 前入力フィールド一覧
 $rawFields = [
     'login' => $login,
     'password' => $password,
@@ -17,8 +17,14 @@ foreach ($rawFields as $key => $value) {
     }
 }
 
-// 入力値空欄チェック
+// trim 後入力フィールド一覧
+$fields = [];
 foreach ($rawFields as $key => $value) {
+    $fields[$key] = trim($value);
+}
+
+// 入力値空欄チェック
+foreach ($fields as $key => $value) {
     if ($value === '') {
         exit($key . 'を入力してください。');
     }
@@ -45,7 +51,7 @@ try {
     $stmtSelectCustomer = $pdo->prepare($sqlSelectCustomer);
 
     // パラメータ設定
-    $stmtSelectCustomer->bindValue(':login', $rawFields['login'], PDO::PARAM_STR);
+    $stmtSelectCustomer->bindValue(':login', $fields['login'], PDO::PARAM_STR);
 
     // クエリ実行
     $stmtSelectCustomer->execute();
@@ -59,7 +65,7 @@ try {
     }
 
     // パスワードのハッシュ検証
-    $isHash = password_verify($rawFields['password'], $customer['password']);
+    $isHash = password_verify($fields['password'], $customer['password']);
     if (!$isHash) {
         exit('ログインに失敗しました。');
     }
