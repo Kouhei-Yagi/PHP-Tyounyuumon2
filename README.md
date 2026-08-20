@@ -93,8 +93,8 @@ docs: Git運用ルールをREADMEに追記
 
 - [✅] feature/db-schema
 - [✅] feature/auth-register
-- [ ] refactor/auth-register-functions
-- [ ] feature/auth-login
+- [✅] refactor/auth-register-functions
+- [✅] feature/auth-login
 - [ ] refactor/auth-login-functions
 - [ ] feature/auth-logout
 - [ ] refactor/auth-logout-functions

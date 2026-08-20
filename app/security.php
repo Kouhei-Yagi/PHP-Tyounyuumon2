@@ -19,7 +19,7 @@ function generateCsrfToken(): string
 function validateCsrfToken(string $csrfToken): bool
 {
     // CSRFトークン存在チェック
-    if (!isset($csrfToken)) {
+    if ($csrfToken === null) {
         return false;
     }
 
