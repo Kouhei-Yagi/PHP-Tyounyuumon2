@@ -106,5 +106,12 @@ try {
     exit('システムエラーが発生しました。');
 }
 
+// ログインユーザー情報をセッションに保持
+$_SESSION['auth'] = [
+    'id' => $customer['id'],
+    'name' => $customer['name'],
+    'login' => $customer['login'],
+];
+
 // ＜出力＞
 echo 'ログインに成功しました。';
