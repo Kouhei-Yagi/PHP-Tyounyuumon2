@@ -6,9 +6,9 @@
  * @param string $dsn データソース
  * @param string $username ユーザー名
  * @param string $dbPassword パスワード
- * @return object PDO
+ * @return PDO
  */
-function getDbConnection(string $dsn, string $username, string $dbPassword): object
+function getDbConnection(string $dsn, string $username, string $dbPassword): PDO
 {
     $options = [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
