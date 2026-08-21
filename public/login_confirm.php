@@ -1,6 +1,7 @@
 <?php
 // 関数ファイルの読み込み
 require_once(__DIR__ . '/../app/db.php');
+require_once(__DIR__ . '/../app/validation.php');
 
 // セッション開始
 session_start();
@@ -30,24 +31,10 @@ $rawFields = [
     'password' => $password,
 ];
 
-// 入力値存在チェック
-foreach ($rawFields as $key => $value) {
-    if ($value === null) {
-        exit('不正なアクセスです。');
-    }
-}
-
 // trim 後入力フィールド一覧
 $fields = [];
 foreach ($rawFields as $key => $value) {
     $fields[$key] = trim($value);
-}
-
-// 入力値空欄チェック
-foreach ($fields as $key => $value) {
-    if ($value === '') {
-        exit($key . 'を入力してください。');
-    }
 }
 
 // 入力値最大文字数
@@ -56,11 +43,25 @@ $maxLengths = [
     'password' => 255,
 ];
 
+// 入力値バリデーション処理
+$validated = validateFields($rawFields, $fields, $maxLengths);
+
+// 入力値存在チェック
+$isExists = $validated['isExist'];
+if (!$isExists) {
+    exit('不正なアクセスです。');
+}
+
+// 入力値空欄チェック
+$errorKey = $validated['errorKey'];
+if ($errorKey) {
+    exit($errorKey . 'を入力してください。');
+}
+
 // 入力値文字数チェック
-foreach ($maxLengths as $key => $max) {
-    if (mb_strlen($fields[$key]) > $max) {
-        exit($key . 'は' . $max . '文字以内で入力してください。');
-    }
+$errorArray = $validated['errorArray'];
+if ($errorArray) {
+    exit($errorArray['key'] . 'は' . $errorArray['max'] . '文字以内で入力してください。');
 }
 
 // ＜処理＞
