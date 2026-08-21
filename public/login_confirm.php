@@ -2,6 +2,7 @@
 // 関数ファイルの読み込み
 require_once(__DIR__ . '/../app/db.php');
 require_once(__DIR__ . '/../app/validation.php');
+require_once(__DIR__ . '/../app/security.php');
 
 // セッション開始
 session_start();
@@ -17,13 +18,11 @@ $csrfToken = filter_input(INPUT_POST, 'csrf_token');
 $login = filter_input(INPUT_POST, 'login');
 $password = filter_input(INPUT_POST, 'password');
 
-// CSRFトークン存在チェック・検証
-if ($csrfToken === null || $csrfToken !== $_SESSION['csrf_token']) {
+// CSRFトークン存在チェック・検証・破棄
+$isCsrfToken = validateCsrfToken($csrfToken);
+if (!$isCsrfToken) {
     exit('不正なアクセスです。');
 }
-
-// CSRFトークン破棄
-unset($_SESSION['csrf_token']);
 
 // trim 前入力フィールド一覧
 $rawFields = [
@@ -47,7 +46,7 @@ $maxLengths = [
 $validated = validateFields($rawFields, $fields, $maxLengths);
 
 // 入力値存在チェック
-$isExists = $validated['isExist'];
+$isExists = $validated['isExists'];
 if (!$isExists) {
     exit('不正なアクセスです。');
 }
