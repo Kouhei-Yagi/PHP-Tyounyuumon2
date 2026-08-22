@@ -3,6 +3,7 @@
 require_once(__DIR__ . '/../app/db.php');
 require_once(__DIR__ . '/../app/validation.php');
 require_once(__DIR__ . '/../app/security.php');
+require_once(__DIR__ . '/../app/auth.php');
 
 // セッション開始
 session_start();
@@ -71,24 +72,10 @@ $dbPassword = 'password';
 
 // 例外処理
 try {
-    // データベース接続
-    $pdo = getDbConnection($dsn, $username, $dbPassword);
+    // ログインユーザー取得
+    $customer = getUserByLogin($dsn, $username, $dbPassword, $fields);
 
-    // ログイン検証
-    // クエリ準備
-    $sqlSelectCustomer = 'SELECT * FROM customer WHERE login = :login';
-    $stmtSelectCustomer = $pdo->prepare($sqlSelectCustomer);
-
-    // パラメータ設定
-    $stmtSelectCustomer->bindValue(':login', $fields['login'], PDO::PARAM_STR);
-
-    // クエリ実行
-    $stmtSelectCustomer->execute();
-
-    // 結果取得
-    $customer = $stmtSelectCustomer->fetch(PDO::FETCH_ASSOC);
-
-    // ログイン名存在チェック
+    // ログインユーザー存在チェック
     if (!$customer) {
         exit('ログインに失敗しました。');
     }
