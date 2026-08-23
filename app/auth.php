@@ -35,3 +35,29 @@ function getUserByLogin(string $dsn, string $username, string $dbPassword, array
 
     return $customer;
 }
+
+/**
+ * ログイン認証処理
+ *
+ * @param string $dsn データソース名
+ * @param string $username ユーザー名
+ * @param string $dbPassword データベースパスワード
+ * @param array $fields 入力フィールド
+ * @return array{id:int,name:string,address:string,login:string,created_at:string}|boolean ログインユーザー情報 or false
+ */
+function authenticateUser(string $dsn, string $username, string $dbPassword, array $fields): array|bool
+{
+    // ログインユーザー取得
+    $customer = getUserByLogin($dsn, $username, $dbPassword, $fields);
+    if (!$customer) {
+        return false;
+    }
+
+    // パスワードのハッシュ検証
+    $isHash = password_verify($fields['password'], $customer['password']);
+    if (!$isHash) {
+        return false;
+    }
+
+    return $customer;
+}

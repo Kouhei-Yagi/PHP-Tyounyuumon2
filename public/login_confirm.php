@@ -72,17 +72,9 @@ $dbPassword = 'password';
 
 // 例外処理
 try {
-    // ログインユーザー取得
-    $customer = getUserByLogin($dsn, $username, $dbPassword, $fields);
-
-    // ログインユーザー存在チェック
+    // ログイン認証処理
+    $customer = authenticateUser($dsn, $username, $dbPassword, $fields);
     if (!$customer) {
-        exit('ログインに失敗しました。');
-    }
-
-    // パスワードのハッシュ検証
-    $isHash = password_verify($fields['password'], $customer['password']);
-    if (!$isHash) {
         exit('ログインに失敗しました。');
     }
 
