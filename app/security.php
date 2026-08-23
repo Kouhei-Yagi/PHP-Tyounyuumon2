@@ -13,10 +13,10 @@ function generateCsrfToken(): string
 /**
  * CSRFトークン検証
  *
- * @param string $csrfToken POST送信されてきたCSRFトークン
+ * @param string|null $csrfToken POST送信されてきたCSRFトークン
  * @return bool
  */
-function validateCsrfToken(string $csrfToken): bool
+function validateCsrfToken(?string $csrfToken): bool
 {
     // CSRFトークン存在チェック
     if ($csrfToken === null) {

@@ -1,9 +1,12 @@
 <?php
+// 関数ファイルの読み込み
+require_once(__DIR__ . '/../app/security.php');
+
 // セッション開始
 session_start();
 
 // CSRFトークン生成
-$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+$_SESSION['csrf_token'] = generateCsrfToken();
 ?>
 
 <!DOCTYPE html>
@@ -17,6 +20,7 @@ $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 <body>
     <form action="login_confirm.php" method="post">
         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+
         <p>
             <label for="login">ログイン名：</label>
             <input type="text" id="login" name="login">

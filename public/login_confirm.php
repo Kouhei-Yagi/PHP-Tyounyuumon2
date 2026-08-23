@@ -1,4 +1,10 @@
 <?php
+// 関数ファイルの読み込み
+require_once(__DIR__ . '/../app/db.php');
+require_once(__DIR__ . '/../app/validation.php');
+require_once(__DIR__ . '/../app/security.php');
+require_once(__DIR__ . '/../app/auth.php');
+
 // セッション開始
 session_start();
 
@@ -13,13 +19,11 @@ $csrfToken = filter_input(INPUT_POST, 'csrf_token');
 $login = filter_input(INPUT_POST, 'login');
 $password = filter_input(INPUT_POST, 'password');
 
-// CSRFトークン存在チェック・検証
-if ($csrfToken === null || $csrfToken !== $_SESSION['csrf_token']) {
+// CSRFトークン存在チェック・検証・破棄
+$isCsrfToken = validateCsrfToken($csrfToken);
+if (!$isCsrfToken) {
     exit('不正なアクセスです。');
 }
-
-// CSRFトークン破棄
-unset($_SESSION['csrf_token']);
 
 // trim 前入力フィールド一覧
 $rawFields = [
@@ -27,24 +31,10 @@ $rawFields = [
     'password' => $password,
 ];
 
-// 入力値存在チェック
-foreach ($rawFields as $key => $value) {
-    if ($value === null) {
-        exit('不正なアクセスです。');
-    }
-}
-
 // trim 後入力フィールド一覧
 $fields = [];
 foreach ($rawFields as $key => $value) {
     $fields[$key] = trim($value);
-}
-
-// 入力値空欄チェック
-foreach ($fields as $key => $value) {
-    if ($value === '') {
-        exit($key . 'を入力してください。');
-    }
 }
 
 // 入力値最大文字数
@@ -53,11 +43,25 @@ $maxLengths = [
     'password' => 255,
 ];
 
+// 入力値バリデーション処理
+$validated = validateFields($rawFields, $fields, $maxLengths);
+
+// 入力値存在チェック
+$isExists = $validated['isExists'];
+if (!$isExists) {
+    exit('不正なアクセスです。');
+}
+
+// 入力値空欄チェック
+$errorKey = $validated['errorKey'];
+if ($errorKey) {
+    exit($errorKey . 'を入力してください。');
+}
+
 // 入力値文字数チェック
-foreach ($maxLengths as $key => $max) {
-    if (mb_strlen($fields[$key]) > $max) {
-        exit($key . 'は' . $max . '文字以内で入力してください。');
-    }
+$errorArray = $validated['errorArray'];
+if ($errorArray) {
+    exit($errorArray['key'] . 'は' . $errorArray['max'] . '文字以内で入力してください。');
 }
 
 // ＜処理＞
@@ -65,38 +69,12 @@ foreach ($maxLengths as $key => $max) {
 $dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
 $username = 'staff';
 $dbPassword = 'password';
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_EMULATE_PREPARES => false,
-];
 
 // 例外処理
 try {
-    // データベース接続
-    $pdo = new PDO($dsn, $username, $dbPassword, $options);
-
-    // ログイン検証
-    // クエリ準備
-    $sqlSelectCustomer = 'SELECT * FROM customer WHERE login = :login';
-    $stmtSelectCustomer = $pdo->prepare($sqlSelectCustomer);
-
-    // パラメータ設定
-    $stmtSelectCustomer->bindValue(':login', $fields['login'], PDO::PARAM_STR);
-
-    // クエリ実行
-    $stmtSelectCustomer->execute();
-
-    // 結果取得
-    $customer = $stmtSelectCustomer->fetch(PDO::FETCH_ASSOC);
-
-    // ログイン名存在チェック
+    // ログイン認証処理
+    $customer = authenticateUser($dsn, $username, $dbPassword, $fields);
     if (!$customer) {
-        exit('ログインに失敗しました。');
-    }
-
-    // パスワードのハッシュ検証
-    $isHash = password_verify($fields['password'], $customer['password']);
-    if (!$isHash) {
         exit('ログインに失敗しました。');
     }
 
