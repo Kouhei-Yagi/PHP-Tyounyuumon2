@@ -5,10 +5,10 @@ session_start();
 
 // ＜入力＞
 // 送信値取得
-$csrfToken = $_POST['csrf_token'];
+$csrfToken = filter_input(INPUT_POST, 'csrf_token');
 
 // CSRFトークン存在チェック・検証
-if (!isset($csrfToken) || $csrfToken !== $_SESSION['csrf_token']) {
+if ($csrfToken === null || $csrfToken !== $_SESSION['csrf_token']) {
     exit('不正なアクセスです。');
 }
 
