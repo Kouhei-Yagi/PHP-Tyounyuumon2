@@ -1,5 +1,8 @@
 <?php
 // ＜前処理＞
+// 関数ファイルの読み込み
+require_once(__DIR__ . '/../app/security.php');
+
 // セッション開始
 session_start();
 
@@ -12,13 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // 送信値取得
 $csrfToken = filter_input(INPUT_POST, 'csrf_token');
 
-// CSRFトークン存在チェック・検証
-if ($csrfToken === null || $csrfToken !== $_SESSION['csrf_token']) {
+// CSRFトークン存在チェック・検証・破棄
+$isCsrfToken = validateCsrfToken($csrfToken);
+if (!$isCsrfToken) {
     exit('不正なアクセスです。');
 }
-
-// CSRFトークン破棄
-unset($_SESSION['csrf_token']);
 
 // ＜処理＞
 // ログインユーザー情報のセッション破棄
