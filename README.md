@@ -97,9 +97,10 @@ docs: Git運用ルールをREADMEに追記
 - [✅] feature/auth-login
 - [✅] refactor/auth-login-functions
 - [✅] feature/auth-logout
-- [ ] refactor/auth-logout-functions
-- [ ] feature/auth-middleware
+- [✅] refactor/auth-logout-functions
+- [ ] feature/db-config
 - [ ] feature/profile-update
+- [ ] feature/auth-middleware
 - [ ] feature/product-list
 - [ ] feature/cart-add
 - [ ] feature/cart-update
