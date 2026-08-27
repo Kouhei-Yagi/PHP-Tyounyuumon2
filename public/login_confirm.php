@@ -1,4 +1,5 @@
 <?php
+// ＜前処理＞
 // 関数ファイルの読み込み
 require_once(__DIR__ . '/../app/db.php');
 require_once(__DIR__ . '/../app/validation.php');
@@ -65,15 +66,10 @@ if ($errorArray) {
 }
 
 // ＜処理＞
-// データベース接続設定
-$dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
-$username = 'staff';
-$dbPassword = 'password';
-
 // 例外処理
 try {
     // ログイン認証処理
-    $customer = authenticateUser($dsn, $username, $dbPassword, $fields);
+    $customer = authenticateUser($fields);
     if (!$customer) {
         exit('ログインに失敗しました。');
     }
