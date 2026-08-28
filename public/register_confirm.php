@@ -1,4 +1,5 @@
 <?php
+// ＜前処理＞
 // 関数ファイルの読み込み
 require_once(__DIR__ . '/../app/db.php');
 require_once(__DIR__ . '/../app/validation.php');
@@ -52,30 +53,28 @@ $maxLengths = [
 $validated = validateFields($rawFields, $fields, $maxLengths);
 
 // 入力値存在チェック
-if (!$validated['isExists']) {
+$isExists = $validated['isExists'];
+if (!$isExists) {
     exit('不正なアクセスです。');
 }
 
 // 入力値空欄チェック
-if ($validated['errorKey']) {
-    exit($validated['errorKey'] . 'を入力してください。');
+$errorKey = $validated['errorKey'];
+if ($errorKey) {
+    exit($errorKey . 'を入力してください。');
 }
 
 // 入力値文字数チェック
-if ($validated['errorArray']) {
-    exit($validated['errorArray']['key'] . 'は' . $validated['errorArray']['max'] . '文字以内で入力してください。');
+$errorArray = $validated['errorArray'];
+if ($errorArray) {
+    exit($errorArray['key'] . 'は' . $errorArray['max'] . '文字以内で入力してください。');
 }
 
 // ＜処理＞
-// データベース接続設定
-$dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
-$username = 'staff';
-$dbPassword = 'password';
-
 // 例外処理
 try {
     // データベース接続
-    $pdo = getDbConnection($dsn, $username, $dbPassword);
+    $pdo = getDbConnection();
 
     // ログイン名重複チェック
     // クエリ準備
