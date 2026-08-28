@@ -89,7 +89,13 @@ chore: リポジトリ初期化のためREADMEを追加
 docs: Git運用ルールをREADMEに追記
 ```
 
-## 開発ロードマップ（chapter7: ECサイト風アプリ）
+## 開発ロードマップ（ECサイト風アプリ）
+
+### ユーザー側
+
+#### 基礎機能
+
+1. 認証機能
 
 - [✅] feature/db-schema
 - [✅] feature/auth-register
@@ -98,14 +104,68 @@ docs: Git運用ルールをREADMEに追記
 - [✅] refactor/auth-login-functions
 - [✅] feature/auth-logout
 - [✅] refactor/auth-logout-functions
-- [ ] feature/db-config
-- [ ] feature/profile-update
-- [ ] feature/auth-middleware
+- [✅] feature/db-config
+
+2. 商品機能
+
 - [ ] feature/product-list
+- [ ] feature/product-detail
+
+3. カート機能
+
 - [ ] feature/cart-add
-- [ ] feature/cart-update
-- [ ] feature/favorite-toggle
+- [ ] feature/cart-list
+- [ ] feature/cart-delete
+
+4. 購入機能
+
 - [ ] feature/purchase-checkout
+- [ ] feature/purchase-complete
+
+5. お気に入り機能
+
+- [ ] feature/favorite-add
+- [ ] feature/favorite-list
+- [ ] feature/favorite-delete
+
+6. 購入履歴機能
+
 - [ ] feature/purchase-history
+
+7. プロフィール機能
+
+- [ ] feature/profile-update
+
+8. 発展機能
+
 - [ ] feature/product-search（任意）
-- [ ] feature/security-hardening（任意）
+- [ ] feature/product-category（任意）
+- [ ] feature/product-stock（任意）
+- [ ] feature/product-review（任意）
+- [ ] feature/coupon（任意）
+- [ ] feature/shipping-multi-address（任意）
+- [ ] feature/point-system（任意）
+- [ ] feature/order-cancel（任意）
+
+### 管理者機能
+
+1. 商品機能
+
+- [ ] feature/admin-product-create
+- [ ] feature/admin-product-update
+- [ ] feature/admin-product-delete
+
+2. 商品管理機能
+
+- [ ] feature/admin-stock-management
+- [ ] feature/admin-category-management
+- [ ] feature/admin-order-list
+- [ ] feature/admin-order-status-update
+
+3. 発展機能
+
+- [ ] feature/admin-review-management（任意）
+- [ ] feature/admin-coupon-management（任意）
+- [ ] feature/admin-point-management（任意）
+- [ ] feature/admin-shipping-multi-address（任意）
+- [ ] feature/admin-sales-report（任意）
