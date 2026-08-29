@@ -108,7 +108,8 @@ docs: Git運用ルールをREADMEに追記
 
 2. 商品機能
 
-- [ ] feature/product-list
+- [✅] feature/product-list
+- [ ] refactor/product-list-functions
 - [ ] feature/product-detail
 
 3. カート機能
