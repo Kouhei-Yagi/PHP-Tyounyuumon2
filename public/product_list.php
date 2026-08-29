@@ -5,18 +5,31 @@
 $dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
 $user = 'staff';
 $password = 'password';
+$options = [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_EMULATE_PREPARES => false,
+];
 
-// データベース接続
-$pdo = new PDO($dsn, $user, $password);
+// 例外処理
+try {
+    // データベース接続
+    $pdo = new PDO($dsn, $user, $password, $options);
 
-// クエリ実行
-$sqlSelectProducts = 'SELECT * FROM product';
-$stmtSelectProducts = $pdo->query($sqlSelectProducts);
+    // クエリ実行
+    $sqlSelectProducts = 'SELECT * FROM product';
+    $stmtSelectProducts = $pdo->query($sqlSelectProducts);
 
-// 結果取得
-$results = $stmtSelectProducts->fetchAll(PDO::FETCH_ASSOC);
+    // 結果取得
+    $products = $stmtSelectProducts->fetchAll(PDO::FETCH_ASSOC);
+
+    // 例外発生時処理
+} catch (PDOException $e) {
+    error_log($e->getMessage());
+    exit('システムエラーが発生しました。');
+}
 ?>
 
+<!-- 出力 -->
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -47,16 +60,16 @@ $results = $stmtSelectProducts->fetchAll(PDO::FETCH_ASSOC);
         </thead>
 
         <tbody>
-            <?php foreach ($results as $item) { ?>
+            <?php foreach ($products as $product) { ?>
                 <tr>
                     <td>
-                        <?= $item['id']; ?>
+                        <?= $product['id']; ?>
                     </td>
                     <td>
-                        <?= $item['name']; ?>
+                        <?= $product['name']; ?>
                     </td>
                     <td>
-                        <?= $item['price']; ?>
+                        <?= $product['price']; ?>
                     </td>
                 </tr>
             <?php } ?>
