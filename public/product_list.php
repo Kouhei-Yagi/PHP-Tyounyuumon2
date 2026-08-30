@@ -1,21 +1,13 @@
 <?php
 // ＜前処理＞
 // 関数ファイルの読み込み
-require_once(__DIR__ . '/../app/db.php');
+require_once(__DIR__ . '/../app/product.php');
 
 // ＜処理＞
 // 例外処理
 try {
-    // データベース接続
-    $pdo = getDbConnection();
-
     // 商品一覧取得
-    // クエリ実行
-    $sqlSelectProducts = 'SELECT * FROM product';
-    $stmtSelectProducts = $pdo->query($sqlSelectProducts);
-
-    // 結果取得
-    $products = $stmtSelectProducts->fetchAll(PDO::FETCH_ASSOC);
+    $products = getProducts();
 
     // 例外発生時処理
 } catch (PDOException $e) {
