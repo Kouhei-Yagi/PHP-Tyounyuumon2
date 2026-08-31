@@ -53,7 +53,9 @@ try {
                         <?= $product['id']; ?>
                     </td>
                     <td>
-                        <?= $product['name']; ?>
+                        <a href="product_detail.php?id=<?= $product['id'] ?>">
+                            <?= $product['name']; ?>
+                        </a>
                     </td>
                     <td>
                         <?= $product['price']; ?>

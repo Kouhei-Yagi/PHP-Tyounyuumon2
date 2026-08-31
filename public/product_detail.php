@@ -1,0 +1,46 @@
+<?php
+// ＜入力＞
+// クエリパラメータ取得
+$id = $_GET['id'];
+
+// ＜処理＞
+// データベース接続設定
+$dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
+$user = 'staff';
+$password = 'password';
+
+// データベース接続
+$pdo = new PDO($dsn, $user, $password);
+
+// クエリ準備
+$sqlSelectProduct = 'SELECT * FROM product WHERE id = :id';
+$stmtSelectProduct = $pdo->prepare($sqlSelectProduct);
+
+// パラメータ設定
+$stmtSelectProduct->bindValue(':id', $id, PDO::PARAM_INT);
+
+// クエリ実行
+$stmtSelectProduct->execute();
+
+// 結果取得
+$product = $stmtSelectProduct->fetch(PDO::FETCH_ASSOC);
+?>
+
+<!-- 出力 -->
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>商品詳細</title>
+</head>
+
+<body>
+    <h1>商品詳細</h1>
+
+    <p>商品番号：<?= $product['id'] ?></p>
+    <p>商品名：<?= $product['name'] ?></p>
+    <p>価格：<?= $product['price'] ?></p>
+</body>
+
+</html>
