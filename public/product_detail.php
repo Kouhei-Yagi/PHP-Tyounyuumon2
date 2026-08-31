@@ -8,22 +8,34 @@ $id = $_GET['id'];
 $dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
 $user = 'staff';
 $password = 'password';
+$options = [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_EMULATE_PREPARES => false,
+];
 
-// データベース接続
-$pdo = new PDO($dsn, $user, $password);
+// 例外処理
+try {
+    // データベース接続
+    $pdo = new PDO($dsn, $user, $password, $options);
 
-// クエリ準備
-$sqlSelectProduct = 'SELECT * FROM product WHERE id = :id';
-$stmtSelectProduct = $pdo->prepare($sqlSelectProduct);
+    // クエリ準備
+    $sqlSelectProduct = 'SELECT * FROM product WHERE id = :id';
+    $stmtSelectProduct = $pdo->prepare($sqlSelectProduct);
 
-// パラメータ設定
-$stmtSelectProduct->bindValue(':id', $id, PDO::PARAM_INT);
+    // パラメータ設定
+    $stmtSelectProduct->bindValue(':id', $id, PDO::PARAM_INT);
 
-// クエリ実行
-$stmtSelectProduct->execute();
+    // クエリ実行
+    $stmtSelectProduct->execute();
 
-// 結果取得
-$product = $stmtSelectProduct->fetch(PDO::FETCH_ASSOC);
+    // 結果取得
+    $product = $stmtSelectProduct->fetch(PDO::FETCH_ASSOC);
+
+    // 例外処理発生時
+} catch (PDOException $e) {
+    error_log($e->getMessage());
+    exit('システムエラーが発生しました。');
+}
 ?>
 
 <!-- 出力 -->
