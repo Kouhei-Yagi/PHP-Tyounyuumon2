@@ -38,6 +38,7 @@ $product = $stmtSelectProduct->fetch(PDO::FETCH_ASSOC);
 <body>
     <h1>商品詳細</h1>
 
+    <p><img src="images/products/product_<?= $product['id'] ?>.jpg" alt="商品写真"></p>
     <p>商品番号：<?= $product['id'] ?></p>
     <p>商品名：<?= $product['name'] ?></p>
     <p>価格：<?= $product['price'] ?></p>
