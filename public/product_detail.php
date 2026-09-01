@@ -1,7 +1,12 @@
 <?php
 // ＜入力＞
 // クエリパラメータ取得
-$id = $_GET['id'];
+$id = filter_input(INPUT_GET, 'id');
+
+// id 存在チェック
+if ($id === null) {
+    exit('不正なアクセスです。');
+}
 
 // ＜処理＞
 // データベース接続設定
