@@ -46,6 +46,11 @@ try {
     // 結果取得
     $product = $stmtSelectProduct->fetch(PDO::FETCH_ASSOC);
 
+    // 商品存在チェック
+    if (!$product) {
+        exit('商品が正しく選択されていません。');
+    }
+
     // 例外処理発生時
 } catch (PDOException $e) {
     error_log($e->getMessage());
