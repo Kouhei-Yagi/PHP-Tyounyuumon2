@@ -8,6 +8,11 @@ if ($id === null) {
     exit('不正なアクセスです。');
 }
 
+// id 空欄チェック
+if ($id === '') {
+    exit('商品が正しく選択されていません。');
+}
+
 // ＜処理＞
 // データベース接続設定
 $dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
