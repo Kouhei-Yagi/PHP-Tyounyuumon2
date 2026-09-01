@@ -5,11 +5,16 @@ $id = filter_input(INPUT_GET, 'id');
 
 // id 存在チェック
 if ($id === null) {
-    exit('不正なアクセスです。');
+    exit('商品が正しく選択されていません。');
 }
 
 // id 空欄チェック
 if ($id === '') {
+    exit('商品が正しく選択されていません。');
+}
+
+// id 数値チェック
+if (!ctype_digit($id)) {
     exit('商品が正しく選択されていません。');
 }
 
