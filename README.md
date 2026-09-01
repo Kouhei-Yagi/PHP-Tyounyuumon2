@@ -110,7 +110,7 @@ docs: Git運用ルールをREADMEに追記
 
 - [✅] feature/product-list
 - [✅] refactor/product-list-functions
-- [ ] feature/product-detail
+- [✅] feature/product-detail
 - [ ] refactor/product-detail-functions
 
 3. カート機能
