@@ -2,23 +2,17 @@
 // ＜前処理＞
 // 関数ファイルの読み込み
 require_once(__DIR__ . '/../app/db.php');
+require_once(__DIR__ . '/../app/validation.php');
 
 // ＜入力＞
 // クエリパラメータ取得
 $id = filter_input(INPUT_GET, 'id');
 
-// id 存在チェック
-if ($id === null) {
-    exit('商品が正しく選択されていません。');
-}
+// id バリデーション処理
+$validated = validateProductId($id);
 
-// id 空欄チェック
-if ($id === '') {
-    exit('商品が正しく選択されていません。');
-}
-
-// id 数値チェック
-if (!ctype_digit($id)) {
+// id 存在・空欄・数値チェック
+if (!$validated) {
     exit('商品が正しく選択されていません。');
 }
 
