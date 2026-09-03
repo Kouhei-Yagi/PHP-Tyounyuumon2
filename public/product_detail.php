@@ -16,18 +16,22 @@ if (!$validated) {
     exit('商品が正しく選択されていません。');
 }
 
+// id 型変換
+$idInt = (int)$id;
+
 // ＜処理＞
 // 例外処理
 try {
     // データベース接続
     $pdo = getDbConnection();
 
+    // 商品詳細取得
     // クエリ準備
     $sqlSelectProduct = 'SELECT * FROM product WHERE id = :id';
     $stmtSelectProduct = $pdo->prepare($sqlSelectProduct);
 
     // パラメータ設定
-    $stmtSelectProduct->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmtSelectProduct->bindValue(':id', $idInt, PDO::PARAM_INT);
 
     // クエリ実行
     $stmtSelectProduct->execute();
