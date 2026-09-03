@@ -1,50 +1,29 @@
 <?php
+// ＜前処理＞
+// 関数ファイルの読み込み
+require_once(__DIR__ . '/../app/validation.php');
+require_once(__DIR__ . '/../app/product.php');
+
 // ＜入力＞
 // クエリパラメータ取得
 $id = filter_input(INPUT_GET, 'id');
 
-// id 存在チェック
-if ($id === null) {
+// id バリデーション処理
+$validated = validateProductId($id);
+
+// id 存在・空欄・数値チェック
+if (!$validated) {
     exit('商品が正しく選択されていません。');
 }
 
-// id 空欄チェック
-if ($id === '') {
-    exit('商品が正しく選択されていません。');
-}
-
-// id 数値チェック
-if (!ctype_digit($id)) {
-    exit('商品が正しく選択されていません。');
-}
+// id 型変換
+$idInt = (int)$id;
 
 // ＜処理＞
-// データベース接続設定
-$dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
-$user = 'staff';
-$password = 'password';
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_EMULATE_PREPARES => false,
-];
-
 // 例外処理
 try {
-    // データベース接続
-    $pdo = new PDO($dsn, $user, $password, $options);
-
-    // クエリ準備
-    $sqlSelectProduct = 'SELECT * FROM product WHERE id = :id';
-    $stmtSelectProduct = $pdo->prepare($sqlSelectProduct);
-
-    // パラメータ設定
-    $stmtSelectProduct->bindValue(':id', $id, PDO::PARAM_INT);
-
-    // クエリ実行
-    $stmtSelectProduct->execute();
-
-    // 結果取得
-    $product = $stmtSelectProduct->fetch(PDO::FETCH_ASSOC);
+    // 商品1件取得
+    $product = getProduct($idInt);
 
     // 商品存在チェック
     if (!$product) {

@@ -80,3 +80,29 @@ function validateFields(array $rawFields, array $fields, array $maxLengths): arr
         'errorArray' => $errorArray,
     ];
 }
+
+/**
+ * id バリデーション
+ *
+ * @param string|null $id クエリパラメータのidの値
+ * @return bool true or false
+ */
+function validateProductId(?string $id): bool
+{
+    // id 存在チェック
+    if ($id === null) {
+        return false;
+    }
+
+    // id 空欄チェック
+    if ($id === '') {
+        return false;
+    }
+
+    // id 数値チェック
+    if (!ctype_digit($id)) {
+        return false;
+    }
+
+    return true;
+}
