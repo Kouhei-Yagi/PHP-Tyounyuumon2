@@ -53,6 +53,21 @@ try {
     <p>商品番号：<?= $product['id'] ?></p>
     <p>商品名：<?= $product['name'] ?></p>
     <p>価格：<?= $product['price'] ?></p>
+
+    <form action="cart_add.php" method="post">
+        <input type="hidden" name="id" value="<?= $product['id'] ?>">
+
+        <p>
+            <label for="count">個数：</label>
+            <select name="count" id="count">
+                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                    <option value="<?= $i ?>"><?= $i; ?></option>
+                <?php } ?>
+            </select>
+        </p>
+
+        <button type="submit">カート追加</button>
+    </form>
 </body>
 
 </html>
