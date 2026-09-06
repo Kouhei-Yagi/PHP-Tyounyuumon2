@@ -19,6 +19,11 @@ if ($productId === null || $count === null) {
     exit('不正なアクセスです。');
 }
 
+// 入力値空欄チェック
+if ($productId === '' || $count === '') {
+    exit('不正なアクセスです。');
+}
+
 // ＜処理＞
 // データベース接続設定
 $dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
