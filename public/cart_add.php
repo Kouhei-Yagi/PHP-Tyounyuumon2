@@ -24,6 +24,11 @@ if ($productId === '' || $count === '') {
     exit('不正なアクセスです。');
 }
 
+// 数値チェック
+if (!ctype_digit($productId) || !ctype_digit($count)) {
+    exit('不正なアクセスです。');
+}
+
 // ＜処理＞
 // データベース接続設定
 $dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
