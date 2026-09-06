@@ -11,8 +11,13 @@ if (!isset($_SESSION['auth'])) {
 // ＜入力＞
 // 送信・入力値取得
 $customerId = $_SESSION['auth']['id'];
-$productId = $_POST['id'];
-$count = $_POST['count'];
+$productId = filter_input(INPUT_POST, 'id');
+$count = filter_input(INPUT_POST, 'count');
+
+// 入力値存在チェック
+if ($productId === null || $count === null) {
+    exit('不正なアクセスです。');
+}
 
 // ＜処理＞
 // データベース接続設定
