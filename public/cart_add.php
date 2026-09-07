@@ -10,9 +10,23 @@ if (!isset($_SESSION['auth'])) {
 
 // ＜入力＞
 // 送信・選択値取得
+$csrfToken = filter_input(INPUT_POST, 'csrf_token');
 $customerId = $_SESSION['auth']['id'];
 $productId = filter_input(INPUT_POST, 'id');
 $count = filter_input(INPUT_POST, 'count');
+
+// csrf トークン存在チェック
+if ($csrfToken === null) {
+    exit('不正なアクセスです。');
+}
+
+// csrf トークン検証
+if ($csrfToken !== $_SESSION['csrf_token']) {
+    exit('不正なアクセスです。');
+}
+
+// csrf トークン破棄
+unset($_SESSION['csrf_token']);
 
 // 送信・選択値存在チェック
 if ($productId === null || $count === null) {
