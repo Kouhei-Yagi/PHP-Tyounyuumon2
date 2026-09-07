@@ -9,6 +9,11 @@ if (!isset($_SESSION['auth'])) {
 }
 
 // ＜入力＞
+// POST 送信チェック
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    exit('不正なアクセスです。');
+}
+
 // 送信・選択値取得
 $csrfToken = filter_input(INPUT_POST, 'csrf_token');
 $customerId = $_SESSION['auth']['id'];
