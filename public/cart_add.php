@@ -9,23 +9,28 @@ if (!isset($_SESSION['auth'])) {
 }
 
 // ＜入力＞
-// 送信・入力値取得
+// 送信・選択値取得
 $customerId = $_SESSION['auth']['id'];
 $productId = filter_input(INPUT_POST, 'id');
 $count = filter_input(INPUT_POST, 'count');
 
-// 入力値存在チェック
+// 送信・選択値存在チェック
 if ($productId === null || $count === null) {
     exit('不正なアクセスです。');
 }
 
-// 入力値空欄チェック
+// 送信・選択値空欄チェック
 if ($productId === '' || $count === '') {
     exit('不正なアクセスです。');
 }
 
-// 数値チェック
+// 送信・選択値数値チェック
 if (!ctype_digit($productId) || !ctype_digit($count)) {
+    exit('不正なアクセスです。');
+}
+
+// 選択値範囲チェック
+if ($count < 1 || $count > 10) {
     exit('不正なアクセスです。');
 }
 
