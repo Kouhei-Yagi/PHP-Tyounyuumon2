@@ -34,6 +34,10 @@ if ($count < 1 || $count > 10) {
     exit('不正なアクセスです。');
 }
 
+// 商品IDと個数を整数型に変換
+$productIdInt = (int)$productId;
+$countInt = (int)$count;
+
 // ＜処理＞
 // データベース接続設定
 $dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
@@ -56,8 +60,8 @@ try {
 
     // クエリパラメータ設定
     $stmtInsertCart->bindValue('customer_id', $customerId, PDO::PARAM_INT);
-    $stmtInsertCart->bindValue('product_id', $productId, PDO::PARAM_INT);
-    $stmtInsertCart->bindValue('count', $count, PDO::PARAM_INT);
+    $stmtInsertCart->bindValue('product_id', $productIdInt, PDO::PARAM_INT);
+    $stmtInsertCart->bindValue('count', $countInt, PDO::PARAM_INT);
 
     // クエリ実行
     $stmtInsertCart->execute();
