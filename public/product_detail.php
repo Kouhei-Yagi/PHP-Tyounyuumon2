@@ -4,6 +4,12 @@
 require_once(__DIR__ . '/../app/validation.php');
 require_once(__DIR__ . '/../app/product.php');
 
+// セッション開始
+session_start();
+
+// CSRF トークン生成
+$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
 // ＜入力＞
 // クエリパラメータ取得
 $id = filter_input(INPUT_GET, 'id');
@@ -53,6 +59,22 @@ try {
     <p>商品番号：<?= $product['id'] ?></p>
     <p>商品名：<?= $product['name'] ?></p>
     <p>価格：<?= $product['price'] ?></p>
+
+    <form action="cart_add.php" method="post">
+        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+        <input type="hidden" name="id" value="<?= $product['id'] ?>">
+
+        <p>
+            <label for="count">個数：</label>
+            <select name="count" id="count">
+                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                    <option value="<?= $i ?>"><?= $i; ?></option>
+                <?php } ?>
+            </select>
+        </p>
+
+        <button type="submit">カート追加</button>
+    </form>
 </body>
 
 </html>
