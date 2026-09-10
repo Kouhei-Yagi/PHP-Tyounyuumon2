@@ -1,6 +1,7 @@
 <?php
 // ＜前処理＞
 // 関数ファイルの読み込み
+require_once(__DIR__ . '/../app/security.php');
 require_once(__DIR__ . '/../app/db.php');
 require_once(__DIR__ . '/../app/validation.php');
 
@@ -25,17 +26,10 @@ $productId = filter_input(INPUT_POST, 'id');
 $count = filter_input(INPUT_POST, 'count');
 
 // csrf トークン存在チェック
-if ($csrfToken === null) {
+$isCsrfToken = validateCsrfToken($csrfToken);
+if (!$isCsrfToken) {
     exit('不正なアクセスです。');
 }
-
-// csrf トークン検証
-if ($csrfToken !== $_SESSION['csrf_token']) {
-    exit('不正なアクセスです。');
-}
-
-// csrf トークン破棄
-unset($_SESSION['csrf_token']);
 
 // 送信・選択値バリデーション
 $validatedId = validateProductId($productId);
