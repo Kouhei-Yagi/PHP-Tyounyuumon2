@@ -2,6 +2,7 @@
 // ＜前処理＞
 // 関数ファイルの読み込み
 require_once(__DIR__ . '/../app/db.php');
+require_once(__DIR__ . '/../app/validation.php');
 
 // セッション開始
 session_start();
@@ -36,29 +37,18 @@ if ($csrfToken !== $_SESSION['csrf_token']) {
 // csrf トークン破棄
 unset($_SESSION['csrf_token']);
 
-// 送信・選択値存在チェック
-if ($productId === null || $count === null) {
-    exit('不正なアクセスです。');
-}
+// 送信・選択値バリデーション
+$validatedId = validateProductId($productId);
+$validatedCount = validateCartCount($count);
 
-// 送信・選択値空欄チェック
-if ($productId === '' || $count === '') {
-    exit('不正なアクセスです。');
-}
-
-// 送信・選択値数値チェック
-if (!ctype_digit($productId) || !ctype_digit($count)) {
+// 送信・選択値存在・空欄・数値・範囲チェック
+if ($validatedId === false || $validatedCount === false) {
     exit('不正なアクセスです。');
 }
 
 // 商品IDと個数を整数型に変換
 $productIdInt = (int)$productId;
 $countInt = (int)$count;
-
-// 選択値範囲チェック
-if ($countInt < 1 || $countInt > 10) {
-    exit('不正なアクセスです。');
-}
 
 // ＜処理＞
 // 例外処理
