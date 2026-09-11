@@ -4,6 +4,7 @@
 require_once(__DIR__ . '/../app/security.php');
 require_once(__DIR__ . '/../app/db.php');
 require_once(__DIR__ . '/../app/validation.php');
+require_once(__DIR__ . '/../app/cart.php');
 
 // セッション開始
 session_start();
@@ -51,19 +52,7 @@ try {
     $pdo = getDbConnection();
 
     // カート情報取得
-    // クエリ準備
-    $sqlSelectCart = 'SELECT * FROM cart WHERE customer_id = :customer_id AND product_id = :product_id';
-    $stmtSelectCart = $pdo->prepare($sqlSelectCart);
-
-    // パラメータ設定
-    $stmtSelectCart->bindValue(':customer_id', $customerId, PDO::PARAM_INT);
-    $stmtSelectCart->bindValue(':product_id', $productIdInt, PDO::PARAM_INT);
-
-    // クエリ実行
-    $stmtSelectCart->execute();
-
-    // 結果取得
-    $cartItem = $stmtSelectCart->fetch(PDO::FETCH_ASSOC);
+    $cartItem = getCartItem($customerId, $productIdInt, $pdo);
 
     // 既に同じ商品があればカート更新・なければカート登録
     if ($cartItem) {
