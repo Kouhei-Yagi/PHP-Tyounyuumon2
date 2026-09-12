@@ -82,7 +82,7 @@ function validateFields(array $rawFields, array $fields, array $maxLengths): arr
 }
 
 /**
- * id バリデーション
+ * 商品 id バリデーション
  *
  * @param string|null $id クエリパラメータのidの値
  * @return bool true or false
@@ -101,6 +101,37 @@ function validateProductId(?string $id): bool
 
     // id 数値チェック
     if (!ctype_digit($id)) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * 商品個数バリデーション
+ *
+ * @param string|null $count 選択された商品個数
+ * @return bool true or false
+ */
+function validateCartCount(?string $count): bool
+{
+    // 選択値存在チェック
+    if ($count === null) {
+        return false;
+    }
+
+    // 選択値空欄チェック
+    if ($count === '') {
+        return false;
+    }
+
+    // 選択値数値チェック
+    if (!ctype_digit($count)) {
+        return false;
+    }
+
+    // 選択値範囲チェック
+    if ($count < 1 || $count > 10) {
         return false;
     }
 

@@ -116,7 +116,7 @@ docs: Git運用ルールをREADMEに追記
 3. カート機能
 
 - [✅] feature/cart-add
-- [ ] refactor/cart-add-functions
+- [✅] refactor/cart-add-functions
 - [ ] feature/cart-list
 - [ ] feature/cart-delete
 

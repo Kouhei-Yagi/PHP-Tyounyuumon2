@@ -1,6 +1,7 @@
 <?php
 // ＜前処理＞
 // 関数ファイルの読み込み
+require_once(__DIR__ . '/../app/security.php');
 require_once(__DIR__ . '/../app/validation.php');
 require_once(__DIR__ . '/../app/product.php');
 
@@ -8,7 +9,7 @@ require_once(__DIR__ . '/../app/product.php');
 session_start();
 
 // CSRF トークン生成
-$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+$_SESSION['csrf_token'] = generateCsrfToken();
 
 // ＜入力＞
 // クエリパラメータ取得
