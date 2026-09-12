@@ -33,7 +33,7 @@ function getCartItem(int $customerId, int $productId, PDO $pdo): array|bool
  * @param int $customerId 顧客ID
  * @param int $productId 商品ID
  * @param int $count 商品個数
- * @param PDO $pdo
+ * @param PDO $pdo PDOオブジェクト
  */
 function updateCartItem(int $customerId, int $productId, int $count, PDO $pdo): void
 {
@@ -48,4 +48,28 @@ function updateCartItem(int $customerId, int $productId, int $count, PDO $pdo): 
 
     // クエリ実行
     $stmtUpdateCart->execute();
+}
+
+/**
+ * カート情報登録
+ *
+ * @param int $customerId 顧客ID
+ * @param int $productId 商品ID
+ * @param int $count 商品個数
+ * @param PDO $pdo PDOオブジェクト
+ * @return void
+ */
+function insertCartItem(int $customerId, int $productId, int $count, PDO $pdo): void
+{
+    // クエリ準備
+    $sqlInsertCart = 'INSERT INTO cart(customer_id, product_id, count) VALUES (:customer_id, :product_id, :count)';
+    $stmtInsertCart = $pdo->prepare($sqlInsertCart);
+
+    // クエリパラメータ設定
+    $stmtInsertCart->bindValue('customer_id', $customerId, PDO::PARAM_INT);
+    $stmtInsertCart->bindValue('product_id', $productId, PDO::PARAM_INT);
+    $stmtInsertCart->bindValue('count', $count, PDO::PARAM_INT);
+
+    // クエリ実行
+    $stmtInsertCart->execute();
 }

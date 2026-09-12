@@ -54,23 +54,13 @@ try {
     // カート情報取得
     $cartItem = getCartItem($customerId, $productIdInt, $pdo);
 
-    // 既に同じ商品があればカート更新・なければカート登録
+    // 既に同じ商品があればカート情報更新・なければカート情報登録
     if ($cartItem) {
         // カート情報更新
         updateCartItem($customerId, $productIdInt, $countInt, $pdo);
     } else {
-        // カート登録
-        // クエリ準備
-        $sqlInsertCart = 'INSERT INTO cart(customer_id, product_id, count) VALUES (:customer_id, :product_id, :count)';
-        $stmtInsertCart = $pdo->prepare($sqlInsertCart);
-
-        // クエリパラメータ設定
-        $stmtInsertCart->bindValue('customer_id', $customerId, PDO::PARAM_INT);
-        $stmtInsertCart->bindValue('product_id', $productIdInt, PDO::PARAM_INT);
-        $stmtInsertCart->bindValue('count', $countInt, PDO::PARAM_INT);
-
-        // クエリ実行
-        $stmtInsertCart->execute();
+        // カート情報登録
+        insertCartItem($customerId, $productId, $count, $pdo);
     }
 
     // 例外発生時処理
