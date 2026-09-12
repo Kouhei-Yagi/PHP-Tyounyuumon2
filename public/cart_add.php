@@ -56,18 +56,8 @@ try {
 
     // 既に同じ商品があればカート更新・なければカート登録
     if ($cartItem) {
-        // カート更新
-        // クエリ準備
-        $sqlUpdateCart = 'UPDATE cart SET count = :count WHERE customer_id = :customer_id AND product_id = :product_id';
-        $stmtUpdateCart = $pdo->prepare($sqlUpdateCart);
-
-        // パラメータ設定
-        $stmtUpdateCart->bindValue(':count', $countInt, PDO::PARAM_INT);
-        $stmtUpdateCart->bindValue(':customer_id', $customerId, PDO::PARAM_INT);
-        $stmtUpdateCart->bindValue(':product_id', $productIdInt, PDO::PARAM_INT);
-
-        // クエリ実行
-        $stmtUpdateCart->execute();
+        // カート情報更新
+        updateCartItem($customerId, $productIdInt, $countInt, $pdo);
     } else {
         // カート登録
         // クエリ準備
