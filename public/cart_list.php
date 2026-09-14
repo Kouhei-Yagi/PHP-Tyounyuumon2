@@ -26,7 +26,17 @@ $dbPassword = 'password';
 $pdo = new PDO($dsn, $user, $dbPassword);
 
 // クエリ準備
-$sqlSelectCart = 'SELECT * FROM cart WHERE customer_id = :customer_id';
+$sqlSelectCart = '
+    SELECT
+        product.id,
+        product.name,
+        product.price,
+        cart.count
+    FROM cart
+    INNER JOIN product
+        ON cart.product_id = product.id
+    WHERE customer_id = :customer_id
+';
 $stmtSelectCart = $pdo->prepare($sqlSelectCart);
 
 // パラメータ設定
@@ -64,8 +74,9 @@ $cartItems = $stmtSelectCart->fetchAll(PDO::FETCH_ASSOC);
     <table>
         <thead>
             <tr>
-                <th>顧客ID</th>
                 <th>商品ID</th>
+                <th>商品名</th>
+                <th>価格</th>
                 <th>個数</th>
             </tr>
         </thead>
@@ -73,8 +84,9 @@ $cartItems = $stmtSelectCart->fetchAll(PDO::FETCH_ASSOC);
         <tbody>
             <?php foreach ($cartItems as $cartItem) { ?>
                 <tr>
-                    <td><?= $cartItem['customer_id'] ?></td>
-                    <td><?= $cartItem['product_id'] ?></td>
+                    <td><?= $cartItem['id'] ?></td>
+                    <td><?= $cartItem['name'] ?></td>
+                    <td><?= $cartItem['price'] ?></td>
                     <td><?= $cartItem['count'] ?></td>
                 </tr>
             <?php } ?>
