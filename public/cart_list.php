@@ -88,27 +88,32 @@ try {
 <body>
     <h1>カート一覧</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>商品ID</th>
-                <th>商品名</th>
-                <th>価格</th>
-                <th>個数</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <?php foreach ($cartItems as $cartItem) { ?>
+    <?php if (!$cartItems): ?>
+        <p>カートに商品がありません。</p>
+    <?php else: ?>
+        <table>
+            <thead>
                 <tr>
-                    <td><?= $cartItem['id'] ?></td>
-                    <td><?= $cartItem['name'] ?></td>
-                    <td><?= $cartItem['price'] ?></td>
-                    <td><?= $cartItem['count'] ?></td>
+                    <th>商品ID</th>
+                    <th>商品名</th>
+                    <th>価格</th>
+                    <th>個数</th>
                 </tr>
-            <?php } ?>
-        </tbody>
-    </table>
+            </thead>
+
+            <tbody>
+                <?php foreach ($cartItems as $cartItem) { ?>
+                    <tr>
+                        <td><?= $cartItem['id'] ?></td>
+                        <td><?= $cartItem['name'] ?></td>
+                        <td><?= $cartItem['price'] ?></td>
+                        <td><?= $cartItem['count'] ?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+
 </body>
 
 </html>
