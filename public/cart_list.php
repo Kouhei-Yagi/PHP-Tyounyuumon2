@@ -102,14 +102,24 @@ try {
             </thead>
 
             <tbody>
-                <?php foreach ($cartItems as $cartItem) { ?>
+                <?php foreach ($cartItems as $cartItem): ?>
                     <tr>
-                        <td><?= $cartItem['id'] ?></td>
-                        <td><?= $cartItem['name'] ?></td>
-                        <td><?= $cartItem['price'] ?></td>
-                        <td><?= $cartItem['count'] ?></td>
+                        <td>
+                            <?= $cartItem['id'] ?>
+                        </td>
+                        <td>
+                            <a href="product_detail.php?id=<?= $cartItem['id'] ?>">
+                                <?= $cartItem['name'] ?>
+                            </a>
+                        </td>
+                        <td>
+                            <?= $cartItem['price'] ?>
+                        </td>
+                        <td>
+                            <?= $cartItem['count'] ?>
+                        </td>
                     </tr>
-                <?php } ?>
+                <?php endforeach; ?>
             </tbody>
         </table>
     <?php endif; ?>
