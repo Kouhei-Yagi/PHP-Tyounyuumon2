@@ -26,12 +26,18 @@ $customerId = $_SESSION['auth']['id'];
 $dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
 $user = 'staff';
 $dbPassword = 'password';
+$options = [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_EMULATE_PREPARES => false,
+];
 
-// データベース接続
-$pdo = new PDO($dsn, $user, $dbPassword);
+// 例外処理
+try {
+    // データベース接続
+    $pdo = new PDO($dsn, $user, $dbPassword, $options);
 
-// クエリ準備
-$sqlSelectCart = '
+    // クエリ準備
+    $sqlSelectCart = '
     SELECT
         product.id,
         product.name,
@@ -42,16 +48,22 @@ $sqlSelectCart = '
         ON cart.product_id = product.id
     WHERE customer_id = :customer_id
 ';
-$stmtSelectCart = $pdo->prepare($sqlSelectCart);
+    $stmtSelectCart = $pdo->prepare($sqlSelectCart);
 
-// パラメータ設定
-$stmtSelectCart->bindValue('customer_id', $customerId, PDO::PARAM_INT);
+    // パラメータ設定
+    $stmtSelectCart->bindValue('customer_id', $customerId, PDO::PARAM_INT);
 
-// クエリ実行
-$stmtSelectCart->execute();
+    // クエリ実行
+    $stmtSelectCart->execute();
 
-// 結果取得
-$cartItems = $stmtSelectCart->fetchAll(PDO::FETCH_ASSOC);
+    // 結果取得
+    $cartItems = $stmtSelectCart->fetchAll(PDO::FETCH_ASSOC);
+
+    // 例外発生時
+} catch (PDOException $e) {
+    error_log($e->getMessage());
+    exit('システムエラーが発生しました。');
+}
 ?>
 
 <!-- 出力 -->
