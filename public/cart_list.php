@@ -9,7 +9,7 @@
 
 // ＜前処理＞
 // 関数ファイルの読み込み
-require_once(__DIR__ . '/../app/db.php');
+require_once(__DIR__ . '/../app/cart.php');
 
 // セッション開始
 session_start();
@@ -26,32 +26,8 @@ $customerId = $_SESSION['auth']['id'];
 // ＜処理＞
 // 例外処理
 try {
-    // データベース接続
-    $pdo = getDbConnection();
-
     // カート一覧取得
-    // クエリ準備
-    $sqlSelectCart = '
-    SELECT
-        product.id,
-        product.name,
-        product.price,
-        cart.count
-    FROM cart
-    INNER JOIN product
-        ON cart.product_id = product.id
-    WHERE customer_id = :customer_id
-';
-    $stmtSelectCart = $pdo->prepare($sqlSelectCart);
-
-    // パラメータ設定
-    $stmtSelectCart->bindValue('customer_id', $customerId, PDO::PARAM_INT);
-
-    // クエリ実行
-    $stmtSelectCart->execute();
-
-    // 結果取得
-    $cartItems = $stmtSelectCart->fetchAll(PDO::FETCH_ASSOC);
+    $cartItems = getCartItemsByCustomerId($customerId);
 
     // 例外発生時
 } catch (PDOException $e) {
