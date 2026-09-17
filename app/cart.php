@@ -13,7 +13,16 @@ require_once(__DIR__ . '/db.php');
 function getCartItem(int $customerId, int $productId, PDO $pdo): array|bool
 {
     // クエリ準備
-    $sqlSelectCart = 'SELECT * FROM cart WHERE customer_id = :customer_id AND product_id = :product_id';
+    $sqlSelectCart = '
+        SELECT
+            *
+        FROM
+            cart
+        WHERE
+            customer_id = :customer_id
+            AND product_id = :product_id
+    ';
+
     $stmtSelectCart = $pdo->prepare($sqlSelectCart);
 
     // パラメータ設定
@@ -38,7 +47,16 @@ function getCartItem(int $customerId, int $productId, PDO $pdo): array|bool
 function updateCartItem(int $customerId, int $productId, int $count, PDO $pdo): void
 {
     // クエリ準備
-    $sqlUpdateCart = 'UPDATE cart SET count = :count WHERE customer_id = :customer_id AND product_id = :product_id';
+    $sqlUpdateCart = '
+        UPDATE
+            cart
+        SET
+            count = :count
+        WHERE
+            customer_id = :customer_id
+            AND product_id = :product_id
+    ';
+
     $stmtUpdateCart = $pdo->prepare($sqlUpdateCart);
 
     // パラメータ設定
@@ -62,7 +80,13 @@ function updateCartItem(int $customerId, int $productId, int $count, PDO $pdo): 
 function insertCartItem(int $customerId, int $productId, int $count, PDO $pdo): void
 {
     // クエリ準備
-    $sqlInsertCart = 'INSERT INTO cart(customer_id, product_id, count) VALUES (:customer_id, :product_id, :count)';
+    $sqlInsertCart = '
+        INSERT INTO
+            cart(customer_id, product_id, count)
+        VALUES
+            (:customer_id, :product_id, :count)
+    ';
+
     $stmtInsertCart = $pdo->prepare($sqlInsertCart);
 
     // クエリパラメータ設定
@@ -72,4 +96,42 @@ function insertCartItem(int $customerId, int $productId, int $count, PDO $pdo): 
 
     // クエリ実行
     $stmtInsertCart->execute();
+}
+
+/**
+ * カート一覧取得
+ *
+ * @param int $customerId ログインユーザーID
+ * @return array{id:int,name:string,price:int,count:int} カート一覧（0件の場合は空配列）
+ */
+function getCartItemsByCustomerId(int $customerId): array
+{
+    // データベース接続
+    $pdo = getDbConnection();
+
+    // クエリ準備
+    $sqlSelectCart = '
+        SELECT
+            product.id,
+            product.name,
+            product.price,
+            cart.count
+        FROM
+            cart
+        INNER JOIN product
+            ON cart.product_id = product.id
+        WHERE
+            customer_id = :customer_id
+    ';
+
+    $stmtSelectCart = $pdo->prepare($sqlSelectCart);
+
+    // パラメータ設定
+    $stmtSelectCart->bindValue('customer_id', $customerId, PDO::PARAM_INT);
+
+    // クエリ実行
+    $stmtSelectCart->execute();
+
+    // 結果取得
+    return $stmtSelectCart->fetchAll(PDO::FETCH_ASSOC);
 }
