@@ -19,6 +19,9 @@ if (!isset($_SESSION['auth'])) {
     exit('ログインしてください。');
 }
 
+// CSRF トークン生成
+$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
 // ＜入力＞
 // 送信値取得
 $customerId = $_SESSION['auth']['id'];
@@ -92,6 +95,7 @@ try {
                         </td>
                         <td>
                             <form action="cart_delete.php" method="post">
+                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                 <input type="hidden" name="product_id" value="<?= $cartItem['id'] ?>">
                                 <button type="submit">削除</button>
                             </form>

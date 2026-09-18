@@ -23,8 +23,22 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // ＜入力＞
 // 送信値取得
+$csrfToken = filter_input(INPUT_POST, 'csrf_token');
 $customerId = $_SESSION['auth']['id'];
-$productId = $_POST['product_id'];
+$productId = filter_input(INPUT_POST, 'product_id');
+
+// CSRF トークン存在チェック
+if ($csrfToken === null) {
+    exit('不正なアクセスです。');
+}
+
+// CSRF トークン検証
+if ($csrfToken !== $_SESSION['csrf_token']) {
+    exit('不正なアクセスです。');
+}
+
+// CSRF トークン破棄
+unset($_SESSION['csrf_token']);
 
 // ＜処理＞
 // カート商品削除
