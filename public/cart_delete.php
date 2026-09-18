@@ -40,6 +40,11 @@ if ($csrfToken !== $_SESSION['csrf_token']) {
 // CSRF トークン破棄
 unset($_SESSION['csrf_token']);
 
+// 商品ID存在チェック
+if ($productId === null) {
+    exit('不正なアクセスです。');
+}
+
 // ＜処理＞
 // カート商品削除
 // データベース接続設定
