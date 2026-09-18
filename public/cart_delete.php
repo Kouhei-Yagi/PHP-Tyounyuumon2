@@ -16,6 +16,11 @@ if (!isset($_SESSION['auth'])) {
     exit('ログインしてください。');
 }
 
+// POST 送信チェック
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    exit('不正なアクセスです。');
+}
+
 // ＜入力＞
 // 送信値取得
 $customerId = $_SESSION['auth']['id'];
