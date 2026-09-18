@@ -11,6 +11,11 @@
 // セッション開始
 session_start();
 
+// ログインチェック
+if (!isset($_SESSION['auth'])) {
+    exit('ログインしてください。');
+}
+
 // ＜入力＞
 // 送信値取得
 $customerId = $_SESSION['auth']['id'];
