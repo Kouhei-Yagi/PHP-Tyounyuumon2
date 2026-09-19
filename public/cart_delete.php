@@ -10,6 +10,7 @@
 // ＜前処理＞
 // 関数ファイルの読み込み
 require_once(__DIR__ . '/../app/security.php');
+require_once(__DIR__ . '/../app/validation.php');
 require_once(__DIR__ . '/../app/db.php');
 
 // セッション開始
@@ -37,18 +38,9 @@ if (!$isCsrfToken) {
     exit('不正なアクセスです。');
 }
 
-// 商品ID存在チェック
-if ($productId === null) {
-    exit('不正なアクセスです。');
-}
-
-// 商品IDの値空欄チェック
-if ($productId === '') {
-    exit('不正なアクセスです。');
-}
-
-// 商品IDの値数値チェック
-if (!ctype_digit($productId)) {
+// 商品IDバリデーション
+$validatedId = validateProductId($productId);
+if (!$validatedId) {
     exit('不正なアクセスです。');
 }
 
