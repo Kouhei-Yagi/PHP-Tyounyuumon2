@@ -9,6 +9,7 @@
 
 // ＜前処理＞
 // 関数ファイルの読み込み
+require_once(__DIR__ . '/../app/security.php');
 require_once(__DIR__ . '/../app/db.php');
 
 // セッション開始
@@ -30,18 +31,11 @@ $csrfToken = filter_input(INPUT_POST, 'csrf_token');
 $customerId = $_SESSION['auth']['id'];
 $productId = filter_input(INPUT_POST, 'product_id');
 
-// CSRF トークン存在チェック
-if ($csrfToken === null) {
+// CSRF トークン存在チェック・検証・破棄
+$isCsrfToken = validateCsrfToken($csrfToken);
+if (!$isCsrfToken) {
     exit('不正なアクセスです。');
 }
-
-// CSRF トークン検証
-if ($csrfToken !== $_SESSION['csrf_token']) {
-    exit('不正なアクセスです。');
-}
-
-// CSRF トークン破棄
-unset($_SESSION['csrf_token']);
 
 // 商品ID存在チェック
 if ($productId === null) {
