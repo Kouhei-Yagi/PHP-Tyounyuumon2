@@ -55,6 +55,9 @@ if (!ctype_digit($productId)) {
     exit('不正なアクセスです。');
 }
 
+// 商品IDを整数型に変換
+$productIdInt = (int)$productId;
+
 // ＜処理＞
 // カート商品削除
 // データベース接続設定
@@ -76,7 +79,7 @@ $stmtDeleteCart = $pdo->prepare($sqlDeleteCart);
 
 // パラメータ設定
 $stmtDeleteCart->bindValue(':customer_id', $customerId, PDO::PARAM_INT);
-$stmtDeleteCart->bindValue(':product_id', $productId, PDO::PARAM_INT);
+$stmtDeleteCart->bindValue(':product_id', $productIdInt, PDO::PARAM_INT);
 
 // クエリ実行
 $stmtDeleteCart->execute();
