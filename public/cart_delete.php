@@ -64,25 +64,37 @@ $productIdInt = (int)$productId;
 $dsn = 'mysql:host=localhost;dbname=shop;charset=utf8mb4';
 $user = 'staff';
 $dbPassword = 'password';
+$options = [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_EMULATE_PREPARES => false,
+];
 
-// データベース接続
-$pdo = new PDO($dsn, $user, $dbPassword);
+// 例外処理
+try {
+    // データベース接続
+    $pdo = new PDO($dsn, $user, $dbPassword, $options);
 
-// クエリ準備
-$sqlDeleteCart = '
+    // クエリ準備
+    $sqlDeleteCart = '
     DELETE FROM cart
     WHERE customer_id = :customer_id
         AND product_id = :product_id
 ';
 
-$stmtDeleteCart = $pdo->prepare($sqlDeleteCart);
+    $stmtDeleteCart = $pdo->prepare($sqlDeleteCart);
 
-// パラメータ設定
-$stmtDeleteCart->bindValue(':customer_id', $customerId, PDO::PARAM_INT);
-$stmtDeleteCart->bindValue(':product_id', $productIdInt, PDO::PARAM_INT);
+    // パラメータ設定
+    $stmtDeleteCart->bindValue(':customer_id', $customerId, PDO::PARAM_INT);
+    $stmtDeleteCart->bindValue(':product_id', $productIdInt, PDO::PARAM_INT);
 
-// クエリ実行
-$stmtDeleteCart->execute();
+    // クエリ実行
+    $stmtDeleteCart->execute();
+
+    // 例外発生時処理
+} catch (PDOException $e) {
+    error_log($e->getMessage());
+    exit('システムエラーが発生しました。');
+}
 
 // ＜出力＞
 echo 'カートから商品を削除しました。';
