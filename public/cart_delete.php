@@ -1,6 +1,6 @@
 <?php
 // ＜簡易設計書＞
-// 機能：カート商品削除処理
+// 機能：カート商品削除
 // 目的：カート一覧から商品を削除する
 // 要件：ログインユーザーのカート一覧から商品が削除される
 // 画面：カート一覧画面（削除ボタン） → カート削除処理
@@ -11,7 +11,7 @@
 // 関数ファイルの読み込み
 require_once(__DIR__ . '/../app/security.php');
 require_once(__DIR__ . '/../app/validation.php');
-require_once(__DIR__ . '/../app/db.php');
+require_once(__DIR__ . '/../app/cart.php');
 
 // セッション開始
 session_start();
@@ -50,25 +50,8 @@ $productIdInt = (int)$productId;
 // ＜処理＞
 // 例外処理
 try {
-    // データベース接続
-    $pdo = getDbConnection();
-
     // カート商品削除
-    // クエリ準備
-    $sqlDeleteCart = '
-    DELETE FROM cart
-    WHERE customer_id = :customer_id
-        AND product_id = :product_id
-';
-
-    $stmtDeleteCart = $pdo->prepare($sqlDeleteCart);
-
-    // パラメータ設定
-    $stmtDeleteCart->bindValue(':customer_id', $customerId, PDO::PARAM_INT);
-    $stmtDeleteCart->bindValue(':product_id', $productIdInt, PDO::PARAM_INT);
-
-    // クエリ実行
-    $stmtDeleteCart->execute();
+    deleteCartItem($customerId, $productIdInt);
 
     // 例外発生時処理
 } catch (PDOException $e) {
