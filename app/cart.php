@@ -135,3 +135,32 @@ function getCartItemsByCustomerId(int $customerId): array
     // 結果取得
     return $stmtSelectCart->fetchAll(PDO::FETCH_ASSOC);
 }
+
+/**
+ * カート商品削除
+ *
+ * @param int $customerId 顧客ID
+ * @param int $productId 商品ID
+ * @return void
+ */
+function deleteCartItem(int $customerId, int $productId): void
+{
+    // データベース接続
+    $pdo = getDbConnection();
+
+    // クエリ準備
+    $sqlDeleteCart = '
+    DELETE FROM cart
+    WHERE customer_id = :customer_id
+        AND product_id = :product_id
+';
+
+    $stmtDeleteCart = $pdo->prepare($sqlDeleteCart);
+
+    // パラメータ設定
+    $stmtDeleteCart->bindValue(':customer_id', $customerId, PDO::PARAM_INT);
+    $stmtDeleteCart->bindValue(':product_id', $productId, PDO::PARAM_INT);
+
+    // クエリ実行
+    $stmtDeleteCart->execute();
+}
